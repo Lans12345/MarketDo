@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketdo/widgets/button_widget.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
 class ViewProductPage extends StatelessWidget {
@@ -77,7 +78,49 @@ class ViewProductPage extends StatelessWidget {
                 children: [
                   FlatButton(
                     color: Colors.green,
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            height: 180,
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextBold(
+                                    text: 'Product Quantity',
+                                    fontSize: 18,
+                                    color: Colors.black),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.remove),
+                                    ),
+                                    TextRegular(
+                                        text: '0',
+                                        fontSize: 18,
+                                        color: Colors.black),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.add),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                ButtonWidget(
+                                    onPressed: () {}, text: 'Continue'),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
                     child: TextBold(
                         text: 'Add to Cart', fontSize: 18, color: Colors.white),
                   ),
@@ -86,7 +129,49 @@ class ViewProductPage extends StatelessWidget {
                   ),
                   FlatButton(
                     color: Colors.blue,
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            height: 180,
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextBold(
+                                    text: 'Product Quantity',
+                                    fontSize: 18,
+                                    color: Colors.black),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.remove),
+                                    ),
+                                    TextRegular(
+                                        text: '0',
+                                        fontSize: 18,
+                                        color: Colors.black),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.add),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                ButtonWidget(
+                                    onPressed: () {}, text: 'Continue'),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
                     child: TextBold(
                         text: 'Buy Now', fontSize: 18, color: Colors.white),
                   ),

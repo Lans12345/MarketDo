@@ -16,13 +16,13 @@ class HomeSettings extends StatelessWidget {
         children: [
           ListTile(
             title: TextBold(
-                text: 'Sell in MarketDo', fontSize: 16, color: Colors.grey),
+                text: 'Sell Products', fontSize: 16, color: Colors.grey),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
           const Divider(),
           ListTile(
-            title:
-                TextBold(text: 'My Products', fontSize: 16, color: Colors.grey),
+            title: TextBold(
+                text: 'My Purchases', fontSize: 16, color: Colors.grey),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
           const Divider(),

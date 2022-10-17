@@ -16,7 +16,7 @@ class ButtonWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
       ),
-      color: Colors.lightGreenAccent,
+      color: Colors.lightGreen,
       onPressed: onPressed,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(80, 15, 80, 15),

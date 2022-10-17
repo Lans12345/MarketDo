@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketdo/screens/views/purchase_view/cart_page.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
 class HomeProfile extends StatefulWidget {
@@ -24,7 +25,7 @@ class _HomeProfileState extends State<HomeProfile> {
               color: Colors.lightBlue[200],
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 70),
+                  padding: const EdgeInsets.only(right: 50),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.lightGreen[400],
@@ -51,6 +52,16 @@ class _HomeProfileState extends State<HomeProfile> {
                             text: '09090104355',
                             fontSize: 10,
                             color: Colors.white),
+                        trailing: IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CartPage()));
+                          },
+                          icon: const Icon(
+                            Icons.shopping_cart_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
