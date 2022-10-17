@@ -5,7 +5,8 @@ PreferredSizeWidget AppbarWidget(
   String title,
 ) {
   return AppBar(
-    backgroundColor: Colors.blue,
+    foregroundColor: Colors.white,
+    backgroundColor: Colors.brown,
     title: TextRegular(text: title, fontSize: 18, color: Colors.white),
     centerTitle: true,
   );

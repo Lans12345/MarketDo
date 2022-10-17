@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketdo/screens/views/settings_view/sell_products.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
 class HomeSettings extends StatelessWidget {
@@ -16,6 +17,10 @@ class HomeSettings extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
+            onTap: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const SellProducts()));
+            },
             title: TextBold(
                 text: 'Sell Products', fontSize: 16, color: Colors.grey),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
