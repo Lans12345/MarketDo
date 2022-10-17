@@ -8,6 +8,7 @@ class HomeSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.brown[400],
         title: TextBold(text: 'Settings', fontSize: 18, color: Colors.white),
         centerTitle: true,
@@ -22,7 +23,13 @@ class HomeSettings extends StatelessWidget {
           const Divider(),
           ListTile(
             title: TextBold(
-                text: 'My Purchases', fontSize: 16, color: Colors.grey),
+                text: 'Customer Orders', fontSize: 16, color: Colors.grey),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
+          ),
+          const Divider(),
+          ListTile(
+            title: TextBold(
+                text: 'Purchase History', fontSize: 16, color: Colors.grey),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
           const Divider(),
