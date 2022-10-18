@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:marketdo/screens/views/settings_view/customer_orders_page.dart';
+import 'package:marketdo/screens/views/settings_view/purchase_history.dart';
 import 'package:marketdo/screens/views/settings_view/sell_products.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
@@ -18,7 +20,7 @@ class HomeSettings extends StatelessWidget {
         children: [
           ListTile(
             onTap: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
+              Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const SellProducts()));
             },
             title: TextBold(
@@ -27,18 +29,38 @@ class HomeSettings extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const CustomerOrderPage()));
+            },
             title: TextBold(
                 text: 'Customer Orders', fontSize: 16, color: Colors.grey),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
           const Divider(),
           ListTile(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const PurchaseHistory()));
+            },
             title: TextBold(
                 text: 'Purchase History', fontSize: 16, color: Colors.grey),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
           const Divider(),
           ListTile(
+            onTap: () {
+              showAboutDialog(
+                  context: context,
+                  applicationName: 'Market Do',
+                  applicationIcon: Image.asset(
+                    'assets/images/googlelogo.png',
+                    height: 20,
+                  ),
+                  applicationLegalese:
+                      "A platform for local vendors in the community",
+                  applicationVersion: 'v1.0');
+            },
             title: TextBold(text: 'About us', fontSize: 16, color: Colors.grey),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
