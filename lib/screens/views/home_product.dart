@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:marketdo/screens/product_category.dart';
 import 'package:marketdo/screens/view_product_page.dart';
+import '../../widgets/search_bar_widget.dart';
 import '../../widgets/text_widget.dart';
 
 class HomeProduct extends StatelessWidget {
@@ -42,31 +43,35 @@ class HomeProduct extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(100),
+              GestureDetector(
+                onTap: () {
+                  showSearch(
+                    context: context,
+                    delegate: MySearchDelegate(),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      width: 300,
+                      height: 55,
+                      child: Center(
+                        child: ListTile(
+                          title: TextBold(
+                              text: 'Search Shop',
+                              fontSize: 14,
+                              color: Colors.grey),
+                          trailing: const Icon(Icons.search),
+                        ),
+                      ),
                     ),
-                    width: 300,
-                    height: 40,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 0),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 0),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          prefixIcon: const Icon(Icons.search),
-                          hintText: 'Search Shop'),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
