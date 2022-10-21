@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketdo/auth/login.dart';
 import 'package:marketdo/screens/views/settings_view/customer_orders_page.dart';
 import 'package:marketdo/screens/views/settings_view/purchase_history.dart';
 import 'package:marketdo/screens/views/settings_view/sell_products.dart';
@@ -91,9 +92,9 @@ class HomeSettings extends StatelessWidget {
                           ),
                           FlatButton(
                             onPressed: () {
-                              // Navigator.of(context).pushReplacement(
-                              //     MaterialPageRoute(
-                              //         builder: (context) => LogInPage()));
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginPage()));
                             },
                             child: const Text(
                               'Continue',
