@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:marketdo/auth/signup.dart';
+import 'package:marketdo/screens/home_page.dart';
 import 'package:marketdo/widgets/button_widget.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
@@ -88,7 +90,12 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              ButtonWidget(onPressed: () {}, text: 'Login'),
+              ButtonWidget(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const HomePage()));
+                  },
+                  text: 'Login'),
               const SizedBox(
                 height: 10,
               ),
@@ -136,7 +143,10 @@ class LoginPage extends StatelessWidget {
                   TextRegular(
                       text: 'No Account?', fontSize: 12, color: Colors.grey),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const SignupPage()));
+                    },
                     child: TextBold(
                         text: 'Create now', fontSize: 14, color: Colors.black),
                   ),
