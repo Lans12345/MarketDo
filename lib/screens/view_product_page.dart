@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketdo/screens/views/purchase_view/checkout_page.dart';
 import 'package:marketdo/widgets/button_widget.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
@@ -114,7 +115,17 @@ class ViewProductPage extends StatelessWidget {
                                   height: 20,
                                 ),
                                 ButtonWidget(
-                                    onPressed: () {}, text: 'Continue'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content:
+                                              Text('Product added to cart'),
+                                        ),
+                                      );
+                                    },
+                                    text: 'Continue'),
                               ],
                             ),
                           );
@@ -165,7 +176,13 @@ class ViewProductPage extends StatelessWidget {
                                   height: 20,
                                 ),
                                 ButtonWidget(
-                                    onPressed: () {}, text: 'Continue'),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CheckoutPage()));
+                                    },
+                                    text: 'Continue'),
                               ],
                             ),
                           );

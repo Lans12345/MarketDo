@@ -38,11 +38,14 @@ class _HomeProfileState extends State<HomeProfile> {
                     height: 100,
                     child: Center(
                       child: ListTile(
-                        leading: const CircleAvatar(
-                          minRadius: 30,
-                          maxRadius: 30,
-                          backgroundImage:
-                              AssetImage('assets/images/profile.png'),
+                        leading: GestureDetector(
+                          onTap: () {},
+                          child: const CircleAvatar(
+                            minRadius: 30,
+                            maxRadius: 30,
+                            backgroundImage:
+                                AssetImage('assets/images/profile.png'),
+                          ),
                         ),
                         title: TextBold(
                             text: 'Lance Olana',
@@ -186,10 +189,24 @@ class _HomeProfileState extends State<HomeProfile> {
                                       text: 'Fresh Saging',
                                       fontSize: 16,
                                       color: Colors.black),
-                                  trailing: TextBold(
-                                      text: '230PHP',
-                                      fontSize: 18,
-                                      color: Colors.green),
+                                  trailing: SizedBox(
+                                    width: 110,
+                                    child: Row(
+                                      children: [
+                                        TextBold(
+                                            text: '230PHP',
+                                            fontSize: 18,
+                                            color: Colors.green),
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            Icons.done_outline_rounded,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                   leading: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Image.asset(

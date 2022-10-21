@@ -43,6 +43,7 @@ dependencies:
   url_launcher:
   firebase_storage:
   image_picker:
+  material_floating_search_bar:
 
 dev_dependencies:
   flutter_test:
