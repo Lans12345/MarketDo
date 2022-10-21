@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marketdo/screens/home_page.dart';
+import 'package:marketdo/auth/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.lightBlue,
       ),
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }
