@@ -18,37 +18,45 @@ class _SellProductsState extends State<SellProducts> {
       appBar: AppbarWidget('My Products'),
       body: Stack(
         children: [
-          ListView.separated(
-            itemCount: 20,
-            separatorBuilder: (context, index) {
-              return const Divider();
-            },
-            itemBuilder: ((context, index) {
-              return ListTile(
-                leading: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset('assets/images/googlelogo.png'),
-                ),
-                title: TextBold(
-                  text: 'Fresh Saging',
-                  fontSize: 18,
-                  color: Colors.grey,
-                ),
-                subtitle: TextRegular(
-                  text: 'Posted on 10/10/2022',
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
-                trailing: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
+          StreamBuilder<Object>(
+              stream: null,
+              builder: (context, snapshot) {
+                return Expanded(
+                  child: SizedBox(
+                    child: ListView.separated(
+                      itemCount: 20,
+                      separatorBuilder: (context, index) {
+                        return const Divider();
+                      },
+                      itemBuilder: ((context, index) {
+                        return ListTile(
+                          leading: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset('assets/images/googlelogo.png'),
+                          ),
+                          title: TextBold(
+                            text: 'Fresh Saging',
+                            fontSize: 18,
+                            color: Colors.grey,
+                          ),
+                          subtitle: TextRegular(
+                            text: 'Posted on 10/10/2022',
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
                   ),
-                ),
-              );
-            }),
-          ),
+                );
+              }),
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: Align(
