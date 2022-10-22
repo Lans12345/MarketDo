@@ -1,11 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:marketdo/auth/signup.dart';
 import 'package:marketdo/screens/home_page.dart';
 import 'package:marketdo/widgets/button_widget.dart';
 import 'package:marketdo/widgets/text_widget.dart';
+import 'package:get_storage/get_storage.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final box = GetStorage();
+
+  late String email = '';
+  late String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,9 @@ class LoginPage extends StatelessWidget {
                 child: TextFormField(
                   style: const TextStyle(
                       color: Colors.black, fontFamily: 'QRegular'),
-                  onChanged: (_userName) {},
+                  onChanged: (_userName) {
+                    email = _userName;
+                  },
                   decoration: InputDecoration(
                     suffixIcon: const Icon(
                       Icons.person,
@@ -48,7 +55,7 @@ class LoginPage extends StatelessWidget {
                           const BorderSide(width: 1, color: Colors.black),
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    labelText: 'User name',
+                    labelText: 'Email',
                     labelStyle: const TextStyle(
                       fontFamily: 'Quicksand',
                       color: Colors.black,
@@ -63,7 +70,9 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                   style: const TextStyle(
                       color: Colors.black, fontFamily: 'QRegular'),
-                  onChanged: (_userName) {},
+                  onChanged: (_userName) {
+                    password = _userName;
+                  },
                   decoration: InputDecoration(
                     suffixIcon: const Icon(
                       Icons.lock,
@@ -91,51 +100,38 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               ButtonWidget(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const HomePage()));
+                  onPressed: () async {
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      box.write('email', email);
+
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+                    } catch (e) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                content: TextRegular(
+                                    text: "$e",
+                                    color: Colors.black,
+                                    fontSize: 12),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(true),
+                                    child: TextBold(
+                                        text: 'Close',
+                                        color: Colors.black,
+                                        fontSize: 12),
+                                  ),
+                                ],
+                              ));
+                    }
                   },
                   text: 'Login'),
               const SizedBox(
                 height: 10,
-              ),
-              TextRegular(text: 'or', fontSize: 14, color: Colors.grey),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 70, right: 70, top: 0, bottom: 20),
-                child: MaterialButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  color: Colors.lightGreen,
-                  onPressed: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/googlelogo.png',
-                          height: 25,
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        const Text(
-                          'Login with Google',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontFamily: 'QRegular'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -145,7 +141,7 @@ class LoginPage extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const SignupPage()));
+                          builder: (context) => SignupPage()));
                     },
                     child: TextBold(
                         text: 'Create now', fontSize: 14, color: Colors.black),

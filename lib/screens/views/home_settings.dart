@@ -94,7 +94,7 @@ class HomeSettings extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                      builder: (context) => const LoginPage()));
+                                      builder: (context) => LoginPage()));
                             },
                             child: const Text(
                               'Continue',
