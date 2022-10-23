@@ -55,6 +55,50 @@ class _CartPageState extends State<CartPage> {
                         itemCount: snapshot.data?.size ?? 0,
                         itemBuilder: ((context, index) {
                           return ListTile(
+                            onLongPress: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: const Text(
+                                          'Delete Confirmation',
+                                          style: TextStyle(
+                                              fontFamily: 'QBold',
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        content: const Text(
+                                          'Are you sure you want to delete this product into your cart??',
+                                          style:
+                                              TextStyle(fontFamily: 'QRegular'),
+                                        ),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text(
+                                              'Close',
+                                              style: TextStyle(
+                                                  fontFamily: 'QRegular',
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          FlatButton(
+                                            onPressed: () {
+                                              FirebaseFirestore.instance
+                                                  .collection('Carts')
+                                                  .doc(data.docs[index].id)
+                                                  .delete();
+                                              Navigator.of(context).pop(true);
+                                            },
+                                            child: const Text(
+                                              'Continue',
+                                              style: TextStyle(
+                                                  fontFamily: 'QRegular',
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ));
+                            },
                             trailing: TextButton(
                               onPressed: () {
                                 box.write(

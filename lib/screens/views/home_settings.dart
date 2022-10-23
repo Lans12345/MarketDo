@@ -31,8 +31,8 @@ class HomeSettings extends StatelessWidget {
           const Divider(),
           ListTile(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const CustomerOrderPage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CustomerOrderPage()));
             },
             title: TextBold(
                 text: 'Customer Orders', fontSize: 16, color: Colors.grey),
