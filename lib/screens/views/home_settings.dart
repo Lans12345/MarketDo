@@ -41,8 +41,8 @@ class HomeSettings extends StatelessWidget {
           const Divider(),
           ListTile(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const PurchaseHistory()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => PurchaseHistory()));
             },
             title: TextBold(
                 text: 'Purchase History', fontSize: 16, color: Colors.grey),

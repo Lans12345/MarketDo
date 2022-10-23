@@ -34,7 +34,7 @@ class _CartPageState extends State<CartPage> {
                         trailing: TextButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const CheckoutPage()));
+                                builder: (context) => CheckoutPage()));
                           },
                           child: TextBold(
                               text: 'Checkout',

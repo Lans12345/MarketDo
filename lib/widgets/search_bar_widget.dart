@@ -63,7 +63,7 @@ class MySearchDelegate extends SearchDelegate {
                 return ListTile(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ViewProductPage()));
+                        builder: (context) => ViewProductPage()));
                   },
                   leading: Padding(
                     padding: const EdgeInsets.all(5.0),

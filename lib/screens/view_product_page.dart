@@ -1,10 +1,51 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:marketdo/screens/views/purchase_view/checkout_page.dart';
-import 'package:marketdo/widgets/button_widget.dart';
+import 'package:marketdo/services/cloud_function/add_cart.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
-class ViewProductPage extends StatelessWidget {
-  const ViewProductPage({Key? key}) : super(key: key);
+class ViewProductPage extends StatefulWidget {
+  @override
+  State<ViewProductPage> createState() => _ViewProductPageState();
+}
+
+class _ViewProductPageState extends State<ViewProductPage> {
+  final box = GetStorage();
+
+  int qty = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  late String name = '';
+  late String contactNumber = '';
+  late String email = '';
+  late String address = '';
+
+  getData() async {
+    // Use provider
+    var collection = FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: box.read('email'));
+
+    var querySnapshot = await collection.get();
+    if (mounted) {
+      setState(() {
+        for (var queryDocumentSnapshot in querySnapshot.docs) {
+          Map<String, dynamic> data = queryDocumentSnapshot.data();
+
+          name = data['name'];
+          contactNumber = data['phoneNumber'];
+          email = data['email'];
+          address = data['address'];
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +66,8 @@ class ViewProductPage extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Image.asset(
-                  'assets/images/googlelogo.png',
+                Image.network(
+                  box.read('imageURL'),
                   height: 180,
                 ),
                 const SizedBox(
@@ -34,9 +75,13 @@ class ViewProductPage extends StatelessWidget {
                 ),
                 ListTile(
                   trailing: TextBold(
-                      text: '250php', fontSize: 24, color: Colors.blue),
+                      text: box.read('productPrice'),
+                      fontSize: 24,
+                      color: Colors.blue),
                   title: TextBold(
-                      text: 'Fresh Saging', fontSize: 24, color: Colors.black),
+                      text: box.read('productName'),
+                      fontSize: 24,
+                      color: Colors.black),
                 ),
                 TextRegular(
                     text: 'Product Description',
@@ -45,30 +90,63 @@ class ViewProductPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextRegular(
-                      text:
-                          'Lipsum Opsum Lipsum Opsum Lipsum Opsum Lipsum Opsum Lipsum Opsum Lipsum Opsum Lipsum Opsum Lipsum Opsum Lipsum Opsum Lipsum Opsum',
+                      text: box.read('productDescription'),
                       fontSize: 12,
                       color: Colors.black),
                 ),
                 TextRegular(
-                    text: 'Shop: Gaisano Mall',
+                    text: 'Seller: ' + box.read('seller'),
                     fontSize: 12,
                     color: Colors.grey),
                 ListTile(
                   title: TextBold(
-                      text: '09090104355', fontSize: 18, color: Colors.black),
+                      text: box.read('contactNumber'),
+                      fontSize: 18,
+                      color: Colors.black),
                   subtitle: TextRegular(
                       text: 'Contact Number', fontSize: 12, color: Colors.grey),
                   trailing: const Icon(Icons.arrow_forward_ios_rounded),
                 ),
                 ListTile(
                   title: TextBold(
-                      text: 'Impasugong Bukidnon',
+                      text: box.read('address'),
                       fontSize: 18,
                       color: Colors.black),
                   subtitle: TextRegular(
-                      text: 'Shop Address', fontSize: 12, color: Colors.grey),
+                      text: 'Seller Address', fontSize: 12, color: Colors.grey),
                   trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                ),
+                TextRegular(
+                    text: 'Product Quantity', fontSize: 12, color: Colors.grey),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        print(qty);
+                        setState(() {
+                          if (qty == 0) {
+                          } else {
+                            qty--;
+                          }
+                        });
+                      },
+                      icon: const Icon(Icons.remove),
+                    ),
+                    TextRegular(
+                        text: qty.toString(),
+                        fontSize: 18,
+                        color: Colors.black),
+                    IconButton(
+                      onPressed: () {
+                        print(qty);
+                        setState(() {
+                          qty++;
+                        });
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -80,56 +158,23 @@ class ViewProductPage extends StatelessWidget {
                   FlatButton(
                     color: Colors.green,
                     onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return SizedBox(
-                            height: 180,
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                TextBold(
-                                    text: 'Product Quantity',
-                                    fontSize: 18,
-                                    color: Colors.black),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.remove),
-                                    ),
-                                    TextRegular(
-                                        text: '0',
-                                        fontSize: 18,
-                                        color: Colors.black),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.add),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                ButtonWidget(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content:
-                                              Text('Product added to cart'),
-                                        ),
-                                      );
-                                    },
-                                    text: 'Continue'),
-                              ],
-                            ),
-                          );
-                        },
+                      addCart(
+                          name,
+                          email,
+                          box.read('seller'),
+                          box.read('sellerEmail'),
+                          box.read('contactNumber'),
+                          box.read('address'),
+                          box.read('category'),
+                          box.read('productName'),
+                          box.read('productDescription'),
+                          box.read('imageURL'),
+                          box.read('productPrice'),
+                          qty);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Product added to cart'),
+                        ),
                       );
                     },
                     child: TextBold(
@@ -141,53 +186,10 @@ class ViewProductPage extends StatelessWidget {
                   FlatButton(
                     color: Colors.blue,
                     onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return SizedBox(
-                            height: 180,
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                TextBold(
-                                    text: 'Product Quantity',
-                                    fontSize: 18,
-                                    color: Colors.black),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.remove),
-                                    ),
-                                    TextRegular(
-                                        text: '0',
-                                        fontSize: 18,
-                                        color: Colors.black),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.add),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                ButtonWidget(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const CheckoutPage()));
-                                    },
-                                    text: 'Continue'),
-                              ],
-                            ),
-                          );
-                        },
-                      );
+                      box.write('qty', qty);
+
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CheckoutPage()));
                     },
                     child: TextBold(
                         text: 'Buy Now', fontSize: 18, color: Colors.white),

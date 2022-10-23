@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:marketdo/screens/views/purchase_view/cart_page.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
@@ -12,6 +14,38 @@ class _HomeProfileState extends State<HomeProfile> {
   bool _selected1 = true;
 
   late int chipValue = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  final box = GetStorage();
+
+  late String profilePicture = '';
+  late String name = '';
+  late String contactNumber = '';
+
+  getData() async {
+    // Use provider
+    var collection = FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: box.read('email'));
+
+    var querySnapshot = await collection.get();
+    if (mounted) {
+      setState(() {
+        for (var queryDocumentSnapshot in querySnapshot.docs) {
+          Map<String, dynamic> data = queryDocumentSnapshot.data();
+
+          profilePicture = data['profilePicture'];
+          name = data['name'];
+          contactNumber = data['phoneNumber'];
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +74,16 @@ class _HomeProfileState extends State<HomeProfile> {
                       child: ListTile(
                         leading: GestureDetector(
                           onTap: () {},
-                          child: const CircleAvatar(
+                          child: CircleAvatar(
                             minRadius: 30,
                             maxRadius: 30,
-                            backgroundImage:
-                                AssetImage('assets/images/profile.png'),
+                            backgroundImage: NetworkImage(profilePicture),
                           ),
                         ),
                         title: TextBold(
-                            text: 'Lance Olana',
-                            fontSize: 24,
-                            color: Colors.white),
+                            text: name, fontSize: 24, color: Colors.white),
                         subtitle: TextRegular(
-                            text: '09090104355',
+                            text: contactNumber,
                             fontSize: 10,
                             color: Colors.white),
                         trailing: IconButton(
@@ -145,48 +176,92 @@ class _HomeProfileState extends State<HomeProfile> {
                 child: IndexedStack(
                   index: chipValue,
                   children: [
-                    StreamBuilder<Object>(
-                        stream: null,
-                        builder: (context, snapshot) {
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Purchases')
+                            .where('buyerEmail', isEqualTo: box.read('email'))
+                            .where('status', isEqualTo: 'To Deliver')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return const Center(child: Text('Error'));
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            print('waiting');
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 50),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.black,
+                              )),
+                            );
+                          }
+
+                          final data = snapshot.requireData;
                           return SizedBox(
                             child: ListView.separated(
-                              itemCount: 10,
-                              separatorBuilder: (context, index) {
+                              separatorBuilder: ((context, index) {
                                 return const Divider();
-                              },
+                              }),
+                              itemCount: snapshot.data?.size ?? 0,
                               itemBuilder: ((context, index) {
                                 return ListTile(
                                   title: TextBold(
-                                      text: 'Fresh Saging',
+                                      text: data.docs[index]['productName'],
                                       fontSize: 16,
                                       color: Colors.black),
                                   trailing: TextBold(
-                                      text: '250PHP',
+                                      text: data.docs[index]['productPrice'],
                                       fontSize: 18,
                                       color: Colors.green),
                                   leading: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                        'assets/images/googlelogo.png'),
+                                    child: Image.network(
+                                        data.docs[index]['imageURL']),
                                   ),
                                 );
                               }),
                             ),
                           );
                         }),
-                    StreamBuilder<Object>(
-                        stream: null,
-                        builder: (context, snapshot) {
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Purchases')
+                            .where('buyerEmail', isEqualTo: box.read('email'))
+                            .where('status', isEqualTo: 'To Pay')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return const Center(child: Text('Error'));
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            print('waiting');
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 50),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.black,
+                              )),
+                            );
+                          }
+
+                          final data = snapshot.requireData;
                           return SizedBox(
                             child: ListView.separated(
-                              itemCount: 10,
-                              separatorBuilder: (context, index) {
+                              separatorBuilder: ((context, index) {
                                 return const Divider();
-                              },
+                              }),
+                              itemCount: snapshot.data?.size ?? 0,
                               itemBuilder: ((context, index) {
                                 return ListTile(
                                   title: TextBold(
-                                      text: 'Fresh Saging',
+                                      text: data.docs[index]['productName'],
                                       fontSize: 16,
                                       color: Colors.black),
                                   trailing: SizedBox(
@@ -194,11 +269,19 @@ class _HomeProfileState extends State<HomeProfile> {
                                     child: Row(
                                       children: [
                                         TextBold(
-                                            text: '230PHP',
+                                            text: data.docs[index]
+                                                ['productPrice'],
                                             fontSize: 18,
                                             color: Colors.green),
                                         IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            FirebaseFirestore.instance
+                                                .collection('Purchases')
+                                                .doc(data.docs[index]['id'])
+                                                .update({
+                                              'status': 'History',
+                                            });
+                                          },
                                           icon: const Icon(
                                             Icons.done_outline_rounded,
                                             color: Colors.green,
@@ -209,8 +292,8 @@ class _HomeProfileState extends State<HomeProfile> {
                                   ),
                                   leading: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                        'assets/images/googlelogo.png'),
+                                    child: Image.network(
+                                        data.docs[index]['imageURL']),
                                   ),
                                 );
                               }),
