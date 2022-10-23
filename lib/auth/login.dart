@@ -28,7 +28,7 @@ class LoginPage extends StatelessWidget {
                 height: 150,
               ),
               const SizedBox(
-                height: 20,
+                height: 50,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),

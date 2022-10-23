@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:marketdo/auth/login.dart';
 import 'package:marketdo/screens/views/settings_view/customer_orders_page.dart';
@@ -91,7 +92,8 @@ class HomeSettings extends StatelessWidget {
                             ),
                           ),
                           FlatButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              await FirebaseAuth.instance.signOut();
                               Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                       builder: (context) => LoginPage()));
