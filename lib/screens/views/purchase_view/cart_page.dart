@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:marketdo/screens/views/purchase_view/checkout_page.dart';
 import 'package:marketdo/widgets/text_widget.dart';
 
@@ -8,6 +10,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  final box = GetStorage();
   var isSelected = false;
 
   @override
@@ -21,44 +24,86 @@ class _CartPageState extends State<CartPage> {
           foregroundColor: Colors.white),
       body: Stack(
         children: [
-          StreamBuilder<Object>(
-              stream: null,
-              builder: (context, snapshot) {
-                return ListView.separated(
-                    itemCount: 10,
-                    separatorBuilder: (context, index) {
-                      return const Divider();
-                    },
-                    itemBuilder: ((context, index) {
-                      return ListTile(
-                        trailing: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => CheckoutPage()));
-                          },
-                          child: TextBold(
-                              text: 'Checkout',
-                              fontSize: 14,
-                              color: Colors.green),
-                        ),
-                        subtitle: TextRegular(
-                            text: 'Olana Shop',
-                            fontSize: 12,
-                            color: Colors.grey),
-                        title: TextBold(
-                            text: 'Fresh Saging (x2) - 250.00php',
-                            fontSize: 18,
-                            color: Colors.black),
-                        leading: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            'assets/images/googlelogo.png',
-                            height: 25,
-                            width: 25,
-                          ),
-                        ),
-                      );
-                    }));
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Carts')
+                  .where('buyerEmail', isEqualTo: box.read('email'))
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return const Center(child: Text('Error'));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  print('waiting');
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.black,
+                    )),
+                  );
+                }
+
+                final data = snapshot.requireData;
+                return SizedBox(
+                    child: ListView.separated(
+                        separatorBuilder: ((context, index) {
+                          return const Divider();
+                        }),
+                        itemCount: snapshot.data?.size ?? 0,
+                        itemBuilder: ((context, index) {
+                          return ListTile(
+                            trailing: TextButton(
+                              onPressed: () {
+                                box.write(
+                                    'address', data.docs[index]['address']);
+                                box.write(
+                                    'category', data.docs[index]['category']);
+                                box.write('contactNumber',
+                                    data.docs[index]['contactNumber']);
+                                box.write('id', data.docs[index]['id']);
+                                box.write(
+                                    'imageURL', data.docs[index]['imageURL']);
+                                box.write('productDescription',
+                                    data.docs[index]['productDescription']);
+
+                                box.write('productPrice',
+                                    data.docs[index]['productPrice']);
+                                box.write('productName',
+                                    data.docs[index]['productName']);
+                                box.write('seller', data.docs[index]['seller']);
+                                box.write('sellerEmail',
+                                    data.docs[index]['sellerEmail']);
+                                box.write('qty', data.docs[index]['qty']);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => CheckoutPage()));
+                              },
+                              child: TextBold(
+                                  text: 'Checkout',
+                                  fontSize: 14,
+                                  color: Colors.green),
+                            ),
+                            subtitle: TextRegular(
+                                text: 'Seller: ${data.docs[index]['seller']}',
+                                fontSize: 12,
+                                color: Colors.grey),
+                            title: TextBold(
+                                text:
+                                    '${data.docs[index]['productName']} (x${data.docs[index]['qty']}) - ${data.docs[index]['productPrice']}.00php',
+                                fontSize: 18,
+                                color: Colors.black),
+                            leading: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.network(
+                                data.docs[index]['imageURL'],
+                                height: 25,
+                                width: 25,
+                              ),
+                            ),
+                          );
+                        })));
               }),
         ],
       ),
