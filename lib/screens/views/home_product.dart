@@ -61,8 +61,7 @@ class _HomeProductState extends State<HomeProduct> {
                       backgroundColor: Colors.transparent,
                       minRadius: 20,
                       maxRadius: 20,
-                      backgroundImage:
-                          AssetImage('assets/images/googlelogo.png'),
+                      backgroundImage: AssetImage('assets/images/logoonly.png'),
                     ),
                   ),
                   CircleAvatar(

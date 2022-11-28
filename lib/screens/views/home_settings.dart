@@ -56,7 +56,7 @@ class HomeSettings extends StatelessWidget {
                   context: context,
                   applicationName: 'Market Do',
                   applicationIcon: Image.asset(
-                    'assets/images/googlelogo.png',
+                    'assets/images/logoonly.png',
                     height: 20,
                   ),
                   applicationLegalese:
