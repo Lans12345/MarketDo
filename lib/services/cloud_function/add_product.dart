@@ -13,6 +13,8 @@ Future addProduct(
 ) async {
   final docUser = FirebaseFirestore.instance.collection('Products').doc();
 
+  var dt = DateTime.now();
+
   final json = {
     'seller': seller,
     'sellerEmail': sellerEmail,
@@ -24,6 +26,8 @@ Future addProduct(
     'productPrice': productPrice,
     'imageURL': imageURL,
     'id': docUser.id,
+    'date': dt.month,
+    'dateTime': DateTime.now(),
   };
 
   await docUser.set(json);
