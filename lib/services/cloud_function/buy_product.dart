@@ -17,6 +17,8 @@ Future buyProduct(
     int qty) async {
   final docUser = FirebaseFirestore.instance.collection('Purchases').doc();
 
+  var dt = DateTime.now();
+
   final json = {
     'name': name,
     'buyerEmail': buyerEmail,
@@ -34,6 +36,8 @@ Future buyProduct(
     'id': docUser.id,
     'status': 'To Deliver',
     'qty': qty,
+    'date': dt.month,
+    'dateTime': DateTime.now(),
   };
 
   await docUser.set(json);
